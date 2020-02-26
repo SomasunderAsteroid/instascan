@@ -44,7 +44,7 @@ class Camera {
     this._stream = await Camera._wrapErrors(async () => {
       return await navigator.mediaDevices.getUserMedia(constraints);
     });
-
+   // Added for iPhone issue
     return this._stream;
   }
 
