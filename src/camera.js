@@ -18,19 +18,29 @@ class Camera {
   }
 
   async start() {
-    let constraints = {
-      audio: false,
-      video: {
-        mandatory: {
-          sourceId: this.id,
-          minWidth: 600,
-          maxWidth: 800,
-          minAspectRatio: 1.6
-        },
-        optional: []
-      }
-    };
+    let constraints;
+    var iOS = /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent) && !window.MSStream;
 
+    if (iOS) {
+      constraints = {
+        'video': {
+          facingMode: 'environment'
+        }, 'audio': false
+      };
+    } else {
+      constraints = {
+        'audio': false,
+        'video': {
+          mandatory: {
+            sourceId: this.id,
+            minWidth: 600,
+            maxWidth: 800,
+            minAspectRatio: 1.6
+          },
+          optional: []
+        }
+      };
+    }
     this._stream = await Camera._wrapErrors(async () => {
       return await navigator.mediaDevices.getUserMedia(constraints);
     });
